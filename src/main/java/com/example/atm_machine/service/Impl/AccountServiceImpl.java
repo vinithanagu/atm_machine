@@ -15,7 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.example.atm_machine.entity.AccountEntity;
-import com.example.atm_machine.entity.Denominations;
+import com.example.atm_machine.entity.DenominationsEntity;
 import com.example.atm_machine.exceptions.InSufficientBalanceException;
 import com.example.atm_machine.exceptions.InSufficientNoteException;
 import com.example.atm_machine.exceptions.NotValidPinNumberException;
@@ -50,16 +50,16 @@ public class AccountServiceImpl implements AccountService {
     final Map<Integer, Integer> result = new HashMap<>();
     final var accountEntity = checkValidAccountNumberAndPinNumber(pinNumber, accountNumber);
     final var atmBalance = atmBalanceRepository.findAll().get(0).getBalance();
-    final List<Denominations> notes = denominationsRepository.findAll();
+    final List<DenominationsEntity> notes = denominationsRepository.findAll();
 
     final List<Integer> qualifiedNotes = new ArrayList<>();
     if (amount <= atmBalance && amount <= accountEntity.getOpeningBalance()) {
       final var set = notes.stream()
-          .sorted(Comparator.comparing(Denominations::getNotes))
+          .sorted(Comparator.comparing(DenominationsEntity::getNotes))
           .map(x -> Collections.nCopies(x.getCount(), x.getNotes()))
           .flatMap(List::stream)
           .collect(Collectors.toList());
-      isSubsetSum(set, set.size(), amount, qualifiedNotes);
+      leastQualifiedNotes(set, set.size(), amount, qualifiedNotes);
       if (allDenominations.isEmpty()) {
         throw new InSufficientNoteException("No Sufficient Notes Available");
       }
@@ -91,7 +91,7 @@ public class AccountServiceImpl implements AccountService {
             "Pin or Account number is not valid :" + pinNumber + "," + accountNumber));
   }
 
-  private void isSubsetSum(final List<Integer> notes, final int n, final Long amount,
+  private void leastQualifiedNotes(final List<Integer> notes, final int n, final Long amount,
       final List<Integer> qualifiedNotes) {
     if (amount == 0) {
       allDenominations.add(qualifiedNotes);
@@ -100,10 +100,10 @@ public class AccountServiceImpl implements AccountService {
     if (n == 0) {
       return;
     }
-    isSubsetSum(notes, n - 1, amount, qualifiedNotes);
+    leastQualifiedNotes(notes, n - 1, amount, qualifiedNotes);
     final List<Integer> ql1 = new ArrayList<>(qualifiedNotes);
     ql1.add(notes.get(n - 1));
-    isSubsetSum(notes, n - 1, amount - (notes.get(n - 1)), ql1);
+    leastQualifiedNotes(notes, n - 1, amount - (notes.get(n - 1)), ql1);
   }
 
 }

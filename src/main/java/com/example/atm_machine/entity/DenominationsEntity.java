@@ -23,7 +23,7 @@ import lombok.ToString;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Table(name = "denominations")
 @Entity
-public class Denominations {
+public class DenominationsEntity {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -27,7 +27,7 @@ import org.springframework.data.annotation.LastModifiedDate;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Table(name = "atm_balance")
 @Entity
-public class ATMBalance {
+public class ATMBalanceEntity {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
