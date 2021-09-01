@@ -9,5 +9,5 @@
 
 ## To Run app as docker image
 
-1. docker build -t <app-name> .
-2. docker run -p 8080:8080  <app-name>
+1. docker build -t {app-name} .
+2. docker run -p 8080:8080 {app-name}
