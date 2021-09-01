@@ -14,9 +14,9 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import com.example.atm_machine.entity.ATMBalance;
+import com.example.atm_machine.entity.ATMBalanceEntity;
 import com.example.atm_machine.entity.AccountEntity;
-import com.example.atm_machine.entity.Denominations;
+import com.example.atm_machine.entity.DenominationsEntity;
 import com.example.atm_machine.exceptions.InSufficientBalanceException;
 import com.example.atm_machine.exceptions.InSufficientNoteException;
 import com.example.atm_machine.exceptions.NotValidPinNumberException;
@@ -68,14 +68,14 @@ public class AccountServiceImplTest {
         .pin("1234")
         .openingBalance(600L)
         .build();
-    final List<Denominations> denominations = new ArrayList<>();
-    denominations.add(Denominations.builder().Notes(20).count(5).build());
-    denominations.add(Denominations.builder().Notes(50).count(3).build());
-    final ATMBalance atmBalance = ATMBalance.builder().balance(1000).build();
+    final List<DenominationsEntity> denominations = new ArrayList<>();
+    denominations.add(DenominationsEntity.builder().Notes(20).count(5).build());
+    denominations.add(DenominationsEntity.builder().Notes(50).count(3).build());
+    final ATMBalanceEntity atmBalanceEntity = ATMBalanceEntity.builder().balance(1000).build();
 
     Mockito.when(accountRepository.findByPinAndAccountNumber("1234", "45Gb")).thenReturn(Optional.of(accountEntity));
     Mockito.when(denominationsRepository.findAll()).thenReturn(denominations);
-    Mockito.when(atmBalanceRepository.findAll()).thenReturn(Collections.singletonList(atmBalance));
+    Mockito.when(atmBalanceRepository.findAll()).thenReturn(Collections.singletonList(atmBalanceEntity));
 
     final Map<Integer, Integer> result = accountService.withdrawBalance("1234", 200L, "45Gb");
     Assertions.assertNotNull(result);
@@ -89,14 +89,14 @@ public class AccountServiceImplTest {
         .pin("1234")
         .openingBalance(600L)
         .build();
-    final List<Denominations> denominations = new ArrayList<>();
-    denominations.add(Denominations.builder().Notes(20).count(5).build());
-    denominations.add(Denominations.builder().Notes(50).count(3).build());
-    final ATMBalance atmBalance = ATMBalance.builder().balance(1000).build();
+    final List<DenominationsEntity> denominations = new ArrayList<>();
+    denominations.add(DenominationsEntity.builder().Notes(20).count(5).build());
+    denominations.add(DenominationsEntity.builder().Notes(50).count(3).build());
+    final ATMBalanceEntity atmBalanceEntity = ATMBalanceEntity.builder().balance(1000).build();
 
     Mockito.when(accountRepository.findByPinAndAccountNumber("1234", "45Gb")).thenReturn(Optional.of(accountEntity));
     Mockito.when(denominationsRepository.findAll()).thenReturn(denominations);
-    Mockito.when(atmBalanceRepository.findAll()).thenReturn(Collections.singletonList(atmBalance));
+    Mockito.when(atmBalanceRepository.findAll()).thenReturn(Collections.singletonList(atmBalanceEntity));
 
     Assertions.assertThrows(InSufficientNoteException.class,
         () -> accountService.withdrawBalance("1234", 202L, "45Gb"));
@@ -109,10 +109,10 @@ public class AccountServiceImplTest {
         .pin("1234")
         .openingBalance(100L)
         .build();
-    final ATMBalance atmBalance = ATMBalance.builder().balance(1000).build();
+    final ATMBalanceEntity atmBalanceEntity = ATMBalanceEntity.builder().balance(1000).build();
 
     Mockito.when(accountRepository.findByPinAndAccountNumber("1234", "45Gb")).thenReturn(Optional.of(accountEntity));
-    Mockito.when(atmBalanceRepository.findAll()).thenReturn(Collections.singletonList(atmBalance));
+    Mockito.when(atmBalanceRepository.findAll()).thenReturn(Collections.singletonList(atmBalanceEntity));
 
     Assertions.assertThrows(InSufficientBalanceException.class,
         () -> accountService.withdrawBalance("1234", 200L, "45Gb"));
