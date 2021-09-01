@@ -93,27 +93,6 @@
         </configuration>
       </plugin>
       <plugin>
-        <groupId>net.serenity-bdd.maven.plugins</groupId>
-        <artifactId>serenity-maven-plugin</artifactId>
-        <version>${serenity.version}</version>
-        <dependencies>
-          <dependency>
-            <groupId>net.serenity-bdd</groupId>
-            <artifactId>serenity-core</artifactId>
-            <version>${serenity.version}</version>
-          </dependency>
-        </dependencies>
-        <executions>
-          <execution>
-            <id>serenity-reports</id>
-            <phase>post-integration-test</phase>
-            <goals>
-              <goal>aggregate</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>
-      <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-surefire-plugin</artifactId>
         <executions>
@@ -138,7 +117,6 @@
             <configuration>
               <includes>
                 <include>**/*IT.java</include>
-                <include>**/*AT.java</include>
               </includes>
             </configuration>
           </execution>
